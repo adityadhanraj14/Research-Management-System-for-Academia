@@ -1,0 +1,91 @@
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- Profile Info -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <img src="/uploads/profiles/<%= profile.profilePic %>" alt="Profile Picture" class="rounded-circle mb-3" width="150">
+          <h4><%= profile.name %></h4>
+          <p class="text-muted">
+            <%= profile.designation %><br>
+            <%= profile.department %> Department
+          </p>
+          <% if (locals.user && locals.user._id.toString() === profile._id.toString()) { %>
+            <button class="btn btn-primary" onclick="redirectToEdit()">Edit Profile</button>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Research Statistics -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5>Research Statistics</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Total Papers</span>
+            <span class="badge bg-primary"><%= stats.total %></span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Research Paper</span>
+            <span class="badge bg-info"><%= stats.researchPaper%></span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Journals</span>
+            <span class="badge bg-info"><%= stats.journal %></span>
+          </div>
+          <div class="d-flex justify-content-between mb-2">
+            <span>Articles</span>
+            <span class="badge bg-success"><%= stats.article %></span>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>Books</span>
+            <span class="badge bg-warning"><%= stats.book %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Research Papers -->
+    <div class="col-md-8">
+      <h4 class="mb-4">Research Papers</h4>
+      <% papers.forEach(paper => { %>
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title"><%= paper.title %></h5>
+            <p class="card-text"><%= paper.abstract.substring(0, 200) %>...</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <small class="text-muted">
+                <%= paper.category %> • 
+                Published: <%= paper.dateOfPublish.toLocaleDateString() %>
+              </small>
+              <div>
+                <button class="btn btn-outline-primary btn-sm" onclick="viewPaper('<%= paper._id %>')">
+                  View Paper
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>
+
+  <script>
+    function viewPaper(paperId) {
+      // Construct the URL to the paper
+      const url = `/research/view/${paperId}`;
+      
+      // Open the paper in a new tab
+      window.open(url, '_blank');
+    }
+    function redirectToEdit() {
+      window.location.href = '/profile/edit';
+    }
+  </script>
+  
+
+<%- include('../partials/footer') %>

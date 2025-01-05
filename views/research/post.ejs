@@ -1,0 +1,116 @@
+<%- include('../partials/header') %>
+
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h4>Post Research Paper</h4>
+          </div>
+          <div class="card-body">
+            <form id="postPaperForm" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="category" class="form-label">Category</label>
+                <select class="form-control" id="category" name="category" required>
+                  <option value="">Select Category</option>
+                  <option value="Research Paper">Research Paper</option>
+                  <option value="Article">Article</option>
+                  <option value="Journal">Journal</option>
+                  <option value="Book">Book</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="abstract" class="form-label">Abstract</label>
+                <textarea class="form-control" id="abstract" name="abstract" rows="4" required></textarea>
+              </div>
+
+              <!-- Co-Authors -->
+              <div class="mb-3">
+                <label for="coAuthors" class="form-label">Co-Authors</label>
+                <select class="form-control" id="coAuthors" name="coAuthors" multiple>
+                  <% users.forEach(user=> { %>
+                    <option value="<%= user._id %>">
+                      <%= user.name %> (<%= user.department %>)
+                    </option>
+                    <% }) %>
+                </select>
+                <small class="text-muted">Hold Ctrl/Cmd to select multiple authors</small>
+              </div>
+
+              <div class="mb-3">
+                <label for="dateOfPublish" class="form-label">Date of Publication</label>
+                <input type="date" class="form-control" id="dateOfPublish" name="dateOfPublish" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="researchId" class="form-label">Research ID</label>
+                <input type="text" class="form-control" id="researchId" name="researchId" required>
+              </div>
+
+              <div class="mb-3">
+                <label for="pdf" class="form-label">Upload PDF</label>
+                <input type="file" class="form-control" id="pdf" name="pdf" accept=".pdf" required>
+              </div>
+
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit Paper</button>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById('postPaperForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+  
+      const formData = new FormData(form);
+  
+      // Ensure coAuthors are passed as a comma-separated string of IDs if any are selected
+      const coAuthors = Array.from(document.getElementById('coAuthors').selectedOptions)
+        .map(option => option.value);
+      
+      if (coAuthors.length > 0) {
+        formData.append('coAuthors', coAuthors.join(','));
+      } else {
+        formData.append('coAuthors', '');  // Ensure it's sent as an empty string if no co-authors are selected
+      }
+  
+      try {
+        const res = await fetch('/research/post', {
+          method: 'POST',
+          body: formData
+        });
+  
+        // Check if the response status is OK
+        if (res.ok) {
+          const data = await res.json();
+          if (data.message) {
+            alert('Paper posted successfully and department counts updated!');
+            window.location.href = '/research'; // Redirect on success
+          } else {
+            alert(data.error || 'Unknown error occurred.');
+          }
+        } else {
+          const data = await res.json();
+          alert(data.error || 'Failed to post paper. Please try again.');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        alert('Error posting paper');
+      }
+    });
+  </script>
+  
+  
+
+  <%- include('../partials/footer') %>

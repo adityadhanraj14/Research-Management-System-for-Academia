@@ -1,0 +1,100 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="text-center">Sign Up</h2>
+        </div>
+        <div class="card-body">
+          <form id="signupForm">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="department">Department</label>
+              <select class="form-control" id="department" name="department" required>
+                <option value="">Select Department</option>
+                <option value="CSE">CSE</option>
+                <option value="ISE">ISE</option>
+                <option value="AIML">AIML</option>
+                <option value="EEE">EEE</option>
+                <option value="ECE">ECE</option>
+                <option value="Mechanical">Mechanical</option>
+                <option value="Civil">Civil</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="designation">Designation</label>
+              <select class="form-control" id="designation" name="designation" required>
+                <option value="">Select Designation</option>
+                <option value="Principal">Principal</option>
+                <option value="Associate Professor">Associate Professor</option>
+                <option value="Professor">Professor</option>
+                <option value="Assistant Professor">Assistant Professor</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <div class="text-center mt-3">
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+            </div>
+            <div class="text-center mt-3">
+              <p>Already have an account? <a href="/login">Login</a></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('signupForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    if (form.password.value !== form.confirmPassword.value) {
+      alert("Passwords don't match!");
+      return;
+    }
+
+    const formData = {
+      name: form.name.value,
+      email: form.email.value,
+      department: form.department.value,
+      designation: form.designation.value,
+      password: form.password.value
+    };
+
+    try {
+      const res = await fetch('/signup', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await res.json();
+      if (data.user) {
+        location.assign('/research');
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
+</script>
+
+<%- include('partials/footer') %>

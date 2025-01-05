@@ -1,0 +1,183 @@
+<%- include('partials/header') %>
+
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <!-- Left Cards -->
+      <div class="col-md-3">
+        <!-- Department Card -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Department Statistics</h5>
+          </div>
+          <div class="card-body">
+            <% departments.forEach(dept=> { %>
+              <div class="d-flex justify-content-between mb-2">
+                <span>
+                  <%= dept.name %>
+                </span>
+                <span class="badge bg-primary">
+                  <%= dept.researchCounts.total %>
+                </span>
+              </div>
+              <% }) %>
+          </div>
+        </div>
+
+        <!-- Top 10 Research Papers Card -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Top 10 Research Papers</h5>
+          </div>
+          <div class="card-body">
+            <% topPapers.forEach(paper=> { %>
+              <div class="mb-3">
+                <h6>
+                  <%= paper.title %>
+                </h6>
+                <small class="text-muted">
+                  <%= paper.primaryAuthor.name %>
+                </small>
+              </div>
+              <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Content -->
+      <div class="col-md-6">
+        <h4 class="mb-4">Recent Research Papers</h4>
+        <% randomPapers.forEach(paper=> { %>
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= paper.title %>
+              </h5>
+              <p class="card-text">
+                <%= paper.abstract.substring(0, 200) %>...
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <a href="/profile/<%= paper.primaryAuthor._id %>" style="text-decoration: none;"><small
+                      class="text-muted">
+                      <%= paper.primaryAuthor.name %>
+                    </small></a>
+                </div>
+                <div>
+                  <button class="btn btn-outline-primary btn-sm me-2" onclick="viewPaper('<%= paper._id %>')">
+                    View Paper
+                  </button>
+                  <button class="btn btn-outline-success btn-sm appreciation-btn" data-paper-id="<%= paper._id %>"
+                    onclick="toggleAppreciation(this)">
+                    Appreciate (<span class="count">
+                      <%= paper.appreciationCount %>
+                    </span>)
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+      </div>
+
+      <!-- Right Cards -->
+      <div class="col-md-3">
+        <!-- Faculty Research Count Card -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5>Faculty Research Count</h5>
+          </div>
+          <div class="card-body">
+            <% facultyStats.forEach(stat=> { %>
+              <div class="d-flex justify-content-between mb-2">
+                <span>
+                  <%= stat.designation %>
+                </span>
+                <span class="badge bg-info">
+                  <%= stat.count %>
+                </span>
+              </div>
+              <% }) %>
+          </div>
+        </div>
+
+        <!-- Research Statistics Card -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Research Statistics</h5>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between mb-2">
+              <span>Total Research Papers</span>
+              <span class="badge bg-success">
+                <%= stats.total %>
+              </span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Research Paper</span>
+              <span class="badge bg-primary">
+                <%= stats.researchPaper %>
+              </span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Journals</span>
+              <span class="badge bg-primary">
+                <%= stats.journal %>
+              </span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Articles</span>
+              <span class="badge bg-info">
+                <%= stats.article %>
+              </span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span>Books</span>
+              <span class="badge bg-warning">
+                <%= stats.book %>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function viewPaper(paperId) {
+      window.open(`/research/view/${paperId}`, '_blank');
+    }
+
+    async function toggleAppreciation(button) {
+      const paperId = button.getAttribute('data-paper-id');
+      
+      try {
+        const response = await fetch('/research/appreciate', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ paperId }),
+        });
+    
+        const data = await response.json();
+    
+        if (data.success) {
+          const countSpan = button.querySelector('.count');
+          let currentCount = parseInt(countSpan.textContent, 10);
+          if (data.message === 'Appreciation added') {
+            currentCount += 1;
+          } else if (data.message === 'Appreciation removed') {
+            currentCount -= 1;
+          }
+          countSpan.textContent = currentCount;
+        } else {
+          alert('Already given Appreciate');
+        }
+      } catch (error) {
+        alert("Login first,can't click appreciate");
+      }
+    }    
+  </script>
+
+  <%- include('partials/footer') %>

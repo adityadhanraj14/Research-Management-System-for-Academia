@@ -1,0 +1,75 @@
+<%- include('../partials/header') %>
+
+  <div class="container my-5">
+    <h1 class="mb-4">Edit Profile</h1>
+
+    <!-- Edit Profile Form -->
+    <form action="/profile/edit" method="POST" enctype="multipart/form-data">
+      <!-- Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          value="<%= user.name %>"
+          required
+        >
+      </div>
+
+      <!-- Department -->
+      <div class="mb-3">
+        <label for="department" class="form-label">Department</label>
+        <select class="form-select" id="department" name="department" required>
+          <option value="CSE" <%= user.department === 'CSE' ? 'selected' : '' %>>CSE</option>
+          <option value="ISE" <%= user.department === 'ISE' ? 'selected' : '' %>>ISE</option>
+          <option value="AIML" <%= user.department === 'AIML' ? 'selected' : '' %>>AIML</option>
+          <option value="EEE" <%= user.department === 'EEE' ? 'selected' : '' %>>EEE</option>
+          <option value="ECE" <%= user.department === 'ECE' ? 'selected' : '' %>>ECE</option>
+          <option value="Mechanical" <%= user.department === 'Mechanical' ? 'selected' : '' %>>Mechanical</option>
+          <option value="Civil" <%= user.department === 'Civil' ? 'selected' : '' %>>Civil</option>
+        </select>
+      </div>
+
+      <!-- Designation -->
+      <div class="mb-3">
+        <label for="designation" class="form-label">Designation</label>
+        <select class="form-select" id="designation" name="designation" required>
+          <option value="Principal" <%= user.designation === 'Principal' ? 'selected' : '' %>>Principal</option>
+          <option value="Associate Professor" <%= user.designation === 'Associate Professor' ? 'selected' : '' %>>Associate Professor</option>
+          <option value="Professor" <%= user.designation === 'Professor' ? 'selected' : '' %>>Professor</option>
+          <option value="Assistant Professor" <%= user.designation === 'Assistant Professor' ? 'selected' : '' %>>Assistant Professor</option>
+        </select>
+      </div>
+
+      <!-- Profile Picture -->
+      <div class="mb-3">
+        <label for="profilePic" class="form-label">Profile Picture</label>
+        <input
+          type="file"
+          class="form-control"
+          id="profilePic"
+          name="profilePic"
+          accept="image/*"
+        >
+        <% if (user.profilePic) { %>
+          <img
+            src="/public/uploads/profile/<%= user.profilePic %>"
+            alt="Profile Picture"
+            class="img-thumbnail mt-2"
+            style="max-width: 150px;"
+          >
+        <% } %>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a href="/profile/<%= user._id %>" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<%- include('../partials/footer') %>
