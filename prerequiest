@@ -1,0 +1,79 @@
+[
+  {
+    "name": "CSE",
+    "facultyCount": 0,
+    "researchCounts": {
+      "total": 0,
+      "researchPaper": 0,
+      "journal": 0,
+      "article": 0,
+      "book": 0
+    }
+  },
+  {
+    "name": "ISE",
+    "facultyCount": 0,
+    "researchCounts": {
+      "total": 0,
+      "researchPaper": 0,
+      "journal": 0,
+      "article": 0,
+      "book": 0
+    }
+  },
+  {
+    "name": "AIML",
+    "facultyCount": 0,
+    "researchCounts": {
+      "total": 0,
+      "researchPaper": 0,
+      "journal": 0,
+      "article": 0,
+      "book": 0
+    }
+  },
+  {
+    "name": "EEE",
+    "facultyCount": 0,
+    "researchCounts": {
+      "total": 0,
+      "researchPaper": 0,
+      "journal": 0,
+      "article": 0,
+      "book": 0
+    }
+  },
+  {
+    "name": "ECE",
+    "facultyCount": 0,
+    "researchCounts": {
+      "total": 0,
+      "researchPaper": 0,
+      "journal": 0,
+      "article": 0,
+      "book": 0
+    }
+  },
+  {
+    "name": "Mechanical",
+    "facultyCount": 0,
+    "researchCounts": {
+      "total": 0,
+      "researchPaper": 0,
+      "journal": 0,
+      "article": 0,
+      "book": 0
+    }
+  },
+  {
+    "name": "Civil",
+    "facultyCount": 0,
+    "researchCounts": {
+      "total": 0,
+      "researchPaper": 0,
+      "journal": 0,
+      "article": 0,
+      "book": 0
+    }
+  }
+]
