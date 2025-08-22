@@ -50,5 +50,8 @@ app.use('/research', researchRoutes);
 app.use('/profile', profileRoutes);
 
 //hosting
-const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// const PORT = process.env.PORT || 8000;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Export the Express app for Vercel
+module.exports = app;
