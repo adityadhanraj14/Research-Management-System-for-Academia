@@ -31,7 +31,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('Connected to MongoDB'))
+.then(() => console.log('Connected to MongoDB '+ process.env.MONGODB_URI))
 .catch(err => console.error('MongoDB connection error:', err));
 
 // Session configuration
@@ -41,7 +41,7 @@ app.use(session({
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   cookie: { secure: process.env.NODE_ENV === 'production' }
-}));
+})).then(() => console.log('Session store initialized', process.env.MONGODB_URI, process.env.SESSION_SECRET));
 
 // Routes
 app.get('*', checkUser);
@@ -50,8 +50,8 @@ app.use('/research', researchRoutes);
 app.use('/profile', profileRoutes);
 
 //hosting
-// const PORT = process.env.PORT || 8000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Export the Express app for Vercel
-module.exports = app;
+// module.exports = app;
